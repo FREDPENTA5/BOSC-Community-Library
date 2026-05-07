@@ -20,9 +20,16 @@ class ResourceLoader:
                     resources.append(os.path.join(root, file))
         return resources
 
-    def load_metadata(self, resource_path: str) -> Dict[str, Any]:
+    def load_metadata(self, resource_path: str, visited: set = None) -> Dict[str, Any]:
         """
-        Loads metadata from a resource file.
+        Loads metadata from a resource file with recursion protection.
         """
-        # Placeholder for complex parsing logic
-        return {"path": resource_path, "status": "indexed"}
+        if visited is None:
+            visited = set()
+        
+        if resource_path in visited:
+            return {"error": "Circular reference detected", "path": resource_path}
+        
+        visited.add(resource_path)
+        # Simulation of loading linked resources
+        return {"path": resource_path, "status": "indexed", "links": []}
