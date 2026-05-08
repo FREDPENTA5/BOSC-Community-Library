@@ -32,4 +32,14 @@ class ResourceLoader:
         
         visited.add(resource_path)
         # Simulation of loading linked resources
-        return {"path": resource_path, "status": "indexed", "links": []}
+        return {"path": resource_path, "status": "indexed", "links": [], "metadata": {}}
+
+    def get_localized_metadata(self, metadata: Dict[str, Any], lang_code: str) -> Dict[str, str]:
+        """
+        Extracts localized fields for the given language code.
+        """
+        localized = {}
+        for key, value in metadata.get("localizations", {}).items():
+            if lang_code in value:
+                localized[key] = value[lang_code]
+        return localized
