@@ -1,12 +1,14 @@
 import os
 from typing import List, Dict, Any
+from src.storage import StorageAdapter, LocalStorageAdapter
 
 class ResourceLoader:
     """
     Core engine for loading and parsing BOSC Community Library resources.
     """
-    def __init__(self, base_path: str):
+    def __init__(self, base_path: str, storage: StorageAdapter = None):
         self.base_path = base_path
+        self.storage = storage or LocalStorageAdapter()
         self.registry = {}
 
     def scan_resources(self, directory: str) -> List[str]:
