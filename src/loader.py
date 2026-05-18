@@ -20,10 +20,19 @@ class ResourceLoader:
                     resources.append(os.path.join(root, file))
         return resources
 
+    def _validate_path(self, resource_path: str):
+        """
+        Ensures the resource path is within the base_path to prevent traversal attacks.
+        """
+        full_path = os.path.abspath(resource_path)
+        if not full_path.startswith(os.path.abspath(self.base_path)):
+            raise ValueError(f"Security Violation: Path {resource_path} is outside allowed base.")
+
     def load_metadata(self, resource_path: str, visited: set = None) -> Dict[str, Any]:
         """
-        Loads metadata from a resource file with recursion protection.
+        Loads metadata from a resource file with recursion protection and path validation.
         """
+        self._validate_path(resource_path)
         if visited is None:
             visited = set()
         
